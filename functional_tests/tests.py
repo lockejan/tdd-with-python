@@ -19,7 +19,7 @@ class NewVisitorTest(LiveServerTestCase):
 
     def test_can_start_a_list_and_retrieve_it_later(self):
         # Edith has heard about a cool new online to-do app.
-        # She goes to check ot its homepage
+        # She goes to check out its homepage
         self.browser.get(self.live_server_url)
 
         # She notices the page title and header mention to-do lists
@@ -56,9 +56,9 @@ class NewVisitorTest(LiveServerTestCase):
         self.check_for_row_in_list_table(
             '2: Use peacock feathers to make a fly')
 
-        # Edith wonders wether the site will remember her list.
-        # The she sees that the site has generated a unique URL for her -- there is
-        # some explanatory text to that effect.
+        # Edith wonders whether the site will remember her list.
+        # She sees that the site has generated a unique URL for her.
+        # There is some explanatory text to that effect.
         self.fail('Finish the test!')
 
         # She visits that URL - her to-do lists is still there.
