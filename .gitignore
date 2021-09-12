@@ -6,3 +6,4 @@ geckodriver.log
 bin/
 include/
 pyvenv.cfg
+/static
