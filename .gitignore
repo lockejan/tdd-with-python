@@ -3,6 +3,7 @@ db.sqlite3
 __pycache__
 geckodriver.log
 .python-version
+.env
 bin/
 include/
 pyvenv.cfg
