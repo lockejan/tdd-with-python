@@ -7,7 +7,6 @@ from selenium.common.exceptions import WebDriverException
 
 MAX_WAIT = 10
 
-
 class FunctionalTest(StaticLiveServerTestCase):
     def setUp(self):
         self.browser = webdriver.Firefox()
