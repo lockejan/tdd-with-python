@@ -12,3 +12,7 @@ class ItemFormTest(TestCase):
         form = ItemForm(data={'text': ''})
         self.assertFalse(form.is_valid())
         self.assertEqual(form.errors['text'], [EMPTY_ITEM_ERROR])
+
+    def test_home_page_uses_item_form(self):
+        response = self.client.get('/')
+        self.assertIsInstance(response.context['form'], ItemForm)
