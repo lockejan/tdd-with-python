@@ -1,5 +1,9 @@
-const initialize = function () {
+window.Superlists = {};
+window.Superlists.initialize = function () {
 	$('input[name="text"]').on('keypress', function() {
+		$('.has-error').hide();
+	});
+	$('input[name="text"]').click( function() {
 		$('.has-error').hide();
 	});
 };
