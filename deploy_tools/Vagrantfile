@@ -2,7 +2,6 @@
 # vi: set ft=ruby :
 
 Vagrant.configure('2') do |config|
-
   # Every Vagrant development environment requires a box. You can search for
   # boxes at https://vagrantcloud.com/search.
   # config.vm.hostname = 'superlists'
@@ -29,7 +28,7 @@ Vagrant.configure('2') do |config|
 
   config.ssh.forward_agent = true
   config.vm.provision 'ansible' do |ansible|
-    ansible.verbose = true
+    # ansible.verbose = true
     ansible.playbook = 'ansible/provision.yml'
     # ansible.inventory_path = "ansible/hosts.ini"
     ansible.extra_vars = {
