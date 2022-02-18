@@ -1,0 +1,111 @@
+---
+- hosts: all
+  become: true
+
+  vars:
+    host: "local.todo.smittie.de"
+    sitename: "todo.smittie.de"
+    repo_url: "git@github.com:lockejan/tdd-with-python.git"
+    no_debug: "y"
+
+  tasks:
+
+    - name: make sure required packages are installed
+      apt:
+        name:
+          - nginx
+          - git
+          - python3
+          - python3-pip
+          - python3-venv
+        state: present
+        update_cache: yes
+        cache_valid_time: 3600
+
+    - name: update or clone project source
+      git:
+        repo: "{{ repo_url }}"
+        version: master
+        # dest: "{{ lookup('env', 'HOME') }}/sites/{{ sitename }}"
+        dest: "/home/vagrant/sites/{{ host }}"
+        accept_hostkey: yes
+        clone: yes
+        update: force
+      become: no
+    
+    - name: create random but idempotent password
+      set_fact:
+        password: "{{ lookup('password', '/dev/null', seed=inventory_hostname) }}"
+
+    - name: create env file
+      template:
+        src: ./ansible/env.j2
+        dest: "/home/vagrant/sites/{{ host }}/.env"
+
+    - name: ensure venv exists and install dependencies into it
+      pip:
+        chdir: "/home/vagrant/sites/{{ host }}"
+        requirements: requirements.txt
+        virtualenv: venv
+        virtualenv_command: "python3 -m venv"
+
+    - name: apply django migrations
+      command: ./venv/bin/python3 manage.py migrate --noinput
+      args:
+        chdir: "/home/vagrant/sites/{{ host }}"
+      become: no
+
+    - name: gather static files to served
+      command: ./venv/bin/python3  manage.py collectstatic --noinput
+      args:
+        chdir: "/home/vagrant/sites/{{ host }}"
+      become: no
+
+    - name: allow long hostnames in nginx
+      lineinfile:
+        dest: /etc/nginx/nginx.conf
+        regexp: '(\s+)#? ?server_names_hash_bucket_size'
+        backrefs: yes
+        line: '\1server_names_hash_bucket_size 64;'
+
+    - name: add nginx config to sites-available
+      template:
+        src: ./ansible/nginx.conf.j2
+        dest: /etc/nginx/sites-available/{{ host }}
+      notify:
+        - restart nginx
+
+    - name: disable nginx default site
+      file:
+        path: /etc/nginx/sites-enabled/default
+        state: absent
+      notify:
+        - restart nginx
+
+    - name: add symlink in nginx sites-enabled
+      file:
+        src: /etc/nginx/sites-available/{{ host }}
+        dest: /etc/nginx/sites-enabled/{{ host }}
+        state: link
+      notify:
+        - restart nginx
+
+    - name: write gunicorn service script
+      template:
+        src: ./ansible/gunicorn.service.j2
+        dest: /etc/systemd/system/gunicorn-{{ host }}.service
+      notify:
+        - restart gunicorn
+
+  handlers:
+    - name: restart nginx
+      service:
+        name: nginx
+        state: restarted
+
+    - name: restart gunicorn
+      systemd:
+        name: gunicorn-{{ host }}
+        daemon_reload: yes
+        enabled: yes
+        state: restarted

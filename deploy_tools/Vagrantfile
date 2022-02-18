@@ -1,0 +1,40 @@
+# -*- mode: ruby -*-
+# vi: set ft=ruby :
+
+Vagrant.configure('2') do |config|
+
+  # Every Vagrant development environment requires a box. You can search for
+  # boxes at https://vagrantcloud.com/search.
+  # config.vm.hostname = 'superlists'
+  config.vm.box = 'ubuntu/focal64'
+  # config.vm.define 'tdd-with-python'
+
+  # config.vm.box_check_update = false
+
+  # NOTE: This will enable public access to the opened port
+  config.vm.network 'forwarded_port', guest: 80, host: 8080, auto_correct: true, host_ip: "127.0.0.1"
+
+  # Share an additional folder to the guest VM. The first argument is
+  # the path on the host to the actual folder. The second argument is
+  # the path on the guest to mount the folder. And the optional third
+  # argument is a set of non-required options.
+  # config.vm.synced_folder "../data", "/vagrant_data"
+
+  config.vm.provider 'virtualbox' do |vb|
+    vb.gui = false
+    vb.cpus = 4
+    vb.memory = '2048'
+    # vb.name = 'tdd-with-python'
+  end
+
+  config.ssh.forward_agent = true
+  config.vm.provision 'ansible' do |ansible|
+    ansible.verbose = true
+    ansible.playbook = 'ansible/provision.yml'
+    # ansible.inventory_path = "ansible/hosts.ini"
+    ansible.extra_vars = {
+      # host: "localhost",
+      # ansible_ssh_user: "root"
+    }
+  end
+end

@@ -3,10 +3,9 @@
 ## Reqired packages:
 
 - nginx
-- Python 3.6
+- Python 3.7
 - virtualenv + pip
 - Git
-- pwgen
 - Systemd
 
 ## Nginx Virtual Host Config
@@ -29,3 +28,14 @@ DOMAIN
 ├── static
 ├── superlists
 └── venv
+
+## Local Development
+
+Vagrant needs to be installed.
+
+Invoking `vagrant up` inside `${Project_Dir}/deploy_tools` will bring up a headless ubuntu machine.
+
+Ansible will provision the project and setup the missing parts. 
+Afterwards the project is reachable via the configured domain.
+
+Before accessing it altering `/etc/hosts/` is probably necessary.
