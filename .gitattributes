@@ -1,0 +1,5 @@
+lists/static/tests/qunit.js linguist-vendored
+lists/static/tests/qunit.css linguist-vendored
+
+lists/static/jquery-3.6.0.min.js linguist-vendored
+lists/static/bootstrap linguist-vendored
