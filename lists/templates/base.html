@@ -11,15 +11,21 @@
 
     <body>
         <div class="container">
-
-            <nav>
+            <nav class="navbar navbar-default" role="navigation">
                 <div class="container-fluid">
                     <a class="navbar-brand" href="/">Superlists</a>
+                    {% if user.email %}
+                    <ul class="nav navbar-nav navbar-right">
+                        <li class='navbar-text'>Logged in as {{ user.email }}</li>
+                        <li><a href="#">Log out</a></li>
+                    </ul>
+                    {% else %}
                     <form class="navbar-form navbar-right" action="{% url 'login_email' %}" method="post">
                         <span>Enter email to log in:</span>
                         <input class="form-control" type="text" name="email">
                         {% csrf_token %}
                     </form>
+                    {% endif %}
                 </div>
             </nav>
 
@@ -27,7 +33,7 @@
             <div class="row">
                 <div class="col-md-8">
                     {% for message in messages %}
-                    {% if message.leve_tag == 'success' %}
+                    {% if message.level_tag == 'success' %}
                     <div class="alert alert-success">
                         {{ message }}
                     </div>
