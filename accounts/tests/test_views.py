@@ -20,7 +20,7 @@ class SendLoginEmailView(TestCase):
         self.assertEqual(mock_send_mail.called, True)
         (subject, body, from_email, to_list), kwargs = mock_send_mail.call_args
         self.assertEqual(subject, 'Your login link for Superlists')
-        self.assertEqual(from_email, 'superlists@smittie.de')
+        self.assertEqual(from_email, 'noreply@smittie.de')
         self.assertEqual(to_list, ['edith@example.com'])
 
     def test_adds_success_message(self):
