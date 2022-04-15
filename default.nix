@@ -1,6 +1,6 @@
 with import <nixpkgs> { };
 mkShell {
-  nativeBuildInputs = [ bashInteractive python37 python37Packages.pip ];
+  nativeBuildInputs = [ bashInteractive python37 python37Packages.pip ansible];
 
   shellHook = ''
     echo "Using ${python37.name}"
