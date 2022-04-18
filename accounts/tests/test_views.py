@@ -1,6 +1,5 @@
 from django.test import TestCase
 from accounts.models import Token
-import accounts.views
 from unittest.mock import patch, call
 
 UUID = "15b542de-d3b5-42bd-9b42-22632a16ebfe"
