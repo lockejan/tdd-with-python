@@ -1,6 +1,18 @@
 ---
 - hosts: all
   become: true
+  vars_prompt:
+    - name: email_host
+      prompt: What is your mailserver uri?
+      private: no
+      default: "mail.example.com"
+    - name: email_user
+      prompt: Which is the targeted mail account?
+      private: no
+      default: "superlists@example.com"
+    - name: email_password
+      prompt: What is the mail-accounts password?
+      default: "foo-bar-baz"
 
   vars:
     host: "local.todo.smittie.de"
@@ -41,6 +53,15 @@
       template:
         src: env.j2
         dest: "/home/vagrant/sites/{{ host }}/.env"
+
+    - name: append mail setup to env file
+      ansible.builtin.lineinfile:
+        path: "/home/vagrant/sites/{{ host }}/.env"
+        line: "{{item.name}}={{item.value}}"
+      loop:
+        - { name: 'EMAIL_HOST', value: "{{ email_host }}" }
+        - { name: 'EMAIL_HOST_USER', value: "{{ email_user }}" }
+        - { name: 'EMAIL_HOST_PASSWORD', value: "{{ email_password }}" }
 
     - name: ensure venv exists and install dependencies into it
       pip:
