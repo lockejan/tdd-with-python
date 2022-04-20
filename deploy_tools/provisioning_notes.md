@@ -1,4 +1,4 @@
-#Provisioning a new site
+# Provisioning a new site
 
 ## Reqired packages:
 
@@ -33,9 +33,12 @@ DOMAIN
 
 Vagrant needs to be installed.
 
+In case you attempt to clone a private repository, make sure your private key is added to ssh-agent.
+Check `ssh-agent -l` to verify that.
+
 Invoking `vagrant up` inside `${Project_Dir}/deploy_tools` will bring up a headless ubuntu machine.
 
-Ansible will provision the project and setup the missing parts. 
+Ansible will provision the project and setup the missing parts.
 Afterwards the project is reachable via the configured domain.
 
-Before accessing it altering `/etc/hosts/` is probably necessary.
+Note: Vagrant will alter `/etc/hosts/` to make the targeted domain reachable.

@@ -1,9 +1,10 @@
 import random
+import os
 
 from fabric.api import cd, env, local, run
 from fabric.contrib.files import append, exists
 
-REPO_URL = 'https://gitlab.com/lockejan/tdd-practice-with-python.git'
+REPO_URL = 'https://github.com/lockejan/tdd-practice-with-python.git'
 
 
 def deploy():
@@ -40,6 +41,8 @@ def _create_or_update_dotenv():
         new_secret = ''.join(random.SystemRandom().choices(
             'abcdefghijklmnopqrstuvwxzy0123456789$%^&*', k=50))
         append('.env', f'DJANGO_SECRET_KEY={new_secret}')
+    email_password = os.environ['EMAIL_PASSWORD']
+    append('.env', f'EMAIL_PASSWORD={email_password}')
 
 
 def _update_static_files():

@@ -8,10 +8,12 @@ Vagrant.configure('2') do |config|
   config.vm.box = 'ubuntu/focal64'
   # config.vm.define 'tdd-with-python'
 
-  # config.vm.box_check_update = false
+  config.vm.box_check_update = false
 
   # NOTE: This will enable public access to the opened port
-  config.vm.network 'forwarded_port', guest: 80, host: 8080, auto_correct: true, host_ip: "127.0.0.1"
+  config.vm.hostname = 'local.todo.smittie.de'
+  config.vm.network "private_network", ip: "192.168.56.99"
+  config.vm.network 'forwarded_port', guest: 80, host: 80
 
   # Share an additional folder to the guest VM. The first argument is
   # the path on the host to the actual folder. The second argument is
@@ -29,7 +31,7 @@ Vagrant.configure('2') do |config|
   config.ssh.forward_agent = true
   config.vm.provision 'ansible' do |ansible|
     # ansible.verbose = true
-    ansible.playbook = 'ansible/provision.yml'
+    ansible.playbook = 'ansible/playbook.yml'
     # ansible.inventory_path = "ansible/hosts.ini"
     ansible.extra_vars = {
       # host: "localhost",
