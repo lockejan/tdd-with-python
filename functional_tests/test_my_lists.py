@@ -1,11 +1,9 @@
 from django.conf import settings
-from django.contrib.auth import BACKEND_SESSION_KEY, SESSION_KEY, get_user_model
-from django.contrib.sessions.backends.db import SessionStore
+
+from functional_tests.test_login import TEST_EMAIL
 from .base import FunctionalTest
 from .server_tools import create_session_on_server
 from .management.commands.create_session import create_pre_authenticated_session
-
-User = get_user_model()
 
 
 class MyListsTest(FunctionalTest):
@@ -23,7 +21,7 @@ class MyListsTest(FunctionalTest):
                  path='/'))
 
     def test_logged_in_users_lists_are_saved_as_my_lists(self):
-        email = 'edith@example.com'
+        email = TEST_EMAIL
         self.browser.get(self.live_server_url)
         self.wait_to_be_logged_out(email)
 

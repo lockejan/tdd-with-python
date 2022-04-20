@@ -18,7 +18,7 @@
           shellHook = ''
             [ ! -d '$PROJDIR/python-dev' ] && python -m venv python-dev && echo "SETUP python-dev: DONE"
             source python-dev/bin/activate
-            python -m pip install --upgrade pip
+            # python -m pip install --upgrade pip
             python -m pip install -r requirements-dev.txt
             set -a; source .env; set +a
           '';
