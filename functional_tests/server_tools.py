@@ -6,7 +6,7 @@ def _get_manage_dot_py(host: str) -> str:
     return f'~/sites/{host}/venv/bin/python ~/sites/{host}/manage.py'
 
 
-def reset_database(host: str):
+def reset_database(host: str) -> None:
     manage_dot_py = _get_manage_dot_py(host)
     with settings(host_string=f'vagrant@{host}:2222'):
         run(f'{manage_dot_py} flush --noinput')

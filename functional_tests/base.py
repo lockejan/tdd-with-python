@@ -25,7 +25,7 @@ def wait(fn):
 
 
 class FunctionalTest(StaticLiveServerTestCase):
-    def setUp(self):
+    def setUp(self) -> None:
         options = Options()
         options.headless = True if os.environ.get('HEADLESS') else False
         self.browser = webdriver.Firefox(options=options)
@@ -34,7 +34,7 @@ class FunctionalTest(StaticLiveServerTestCase):
             self.live_server_url = 'http://' + self.staging_server
             reset_database(self.staging_server)
 
-    def tearDown(self):
+    def tearDown(self) -> None:
         self.browser.quit()
 
     @wait
@@ -42,7 +42,7 @@ class FunctionalTest(StaticLiveServerTestCase):
         return fn()
 
     @wait
-    def wait_for_row_in_list_table(self, row_text):
+    def wait_for_row_in_list_table(self, row_text: str) -> None:
         table = self.browser.find_element_by_id('id_list_table')
         rows = table.find_elements_by_tag_name('tr')
         self.assertIn(row_text, [row.text for row in rows])
@@ -51,13 +51,13 @@ class FunctionalTest(StaticLiveServerTestCase):
         return self.browser.find_element_by_id('id_text')
 
     @wait
-    def wait_to_be_logged_in(self, email):
+    def wait_to_be_logged_in(self, email: str) -> None:
         self.browser.find_element_by_link_text('Log out')
         navbar = self.browser.find_element_by_css_selector('.navbar')
         self.assertIn(email, navbar.text)
 
     @wait
-    def wait_to_be_logged_out(self, email):
+    def wait_to_be_logged_out(self, email: str) -> None:
         self.browser.find_element_by_name('email')
         navbar = self.browser.find_element_by_css_selector('.navbar')
         self.assertNotIn(email, navbar.text)
