@@ -2,3 +2,4 @@
 selenium==3.141.0
 yapf==0.31.0
 Fabric==1.15.0
+coverage==6.3.2
