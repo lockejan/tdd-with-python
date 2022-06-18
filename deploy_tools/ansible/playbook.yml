@@ -33,17 +33,17 @@
         state: present
         update_cache: yes
         cache_valid_time: 3600
+      become_user: root
 
     - name: update or clone project source
       git:
         repo: "{{ repo_url }}"
         version: master
-        # dest: "{{ lookup('env', 'HOME') }}/sites/{{ sitename }}"
-        dest: "/home/vagrant/sites/{{ host }}"
+        dest: "{{ ansible_env.HOME }}/sites/{{ sitename }}"
         accept_hostkey: yes
         clone: yes
         force: yes
-      become: no
+      become: false
 
     - name: create random but idempotent password
       set_fact:
@@ -52,11 +52,11 @@
     - name: create env file
       template:
         src: env.j2
-        dest: "/home/vagrant/sites/{{ host }}/.env"
+        dest: "{{ ansible_env.HOME }}/sites/{{ host }}/.env"
 
     - name: append mail setup to env file
       ansible.builtin.lineinfile:
-        path: "/home/vagrant/sites/{{ host }}/.env"
+        path: "{{ ansible_env.HOME }}/sites/{{ host }}/.env"
         line: "{{item.name}}={{item.value}}"
       loop:
         - { name: 'EMAIL_HOST', value: "{{ email_host }}" }
@@ -65,7 +65,7 @@
 
     - name: ensure venv exists and install dependencies into it
       pip:
-        chdir: "/home/vagrant/sites/{{ host }}"
+        chdir: "{{ ansible_env.HOME }}/sites/{{ host }}"
         requirements: requirements.txt
         virtualenv: venv
         virtualenv_command: "python3 -m venv"
@@ -73,14 +73,14 @@
     - name: apply django migrations
       command: ./venv/bin/python3 manage.py migrate --noinput
       args:
-        chdir: "/home/vagrant/sites/{{ host }}"
-      become: no
+        chdir: "{{ ansible_env.HOME }}/sites/{{ host }}"
+      # become: false
 
     - name: gather static files to served
       command: ./venv/bin/python3  manage.py collectstatic --noinput
       args:
-        chdir: "/home/vagrant/sites/{{ host }}"
-      become: no
+        chdir: "{{ ansible_env.HOME }}/sites/{{ host }}"
+      # become: false
 
     - name: allow long hostnames in nginx
       lineinfile:
@@ -95,6 +95,7 @@
         dest: /etc/nginx/sites-available/{{ host }}
       notify:
         - restart nginx
+      become_user: root
 
     - name: disable nginx default site
       file:
@@ -102,14 +103,16 @@
         state: absent
       notify:
         - restart nginx
+      become_user: root
 
     - name: add symlink in nginx sites-enabled
       file:
-        src: /etc/nginx/sites-available/{{ host }}
+        src: /etc/nginx/sites-available/{{ host }}.conf
         dest: /etc/nginx/sites-enabled/{{ host }}
         state: link
       notify:
         - restart nginx
+      become_user: root
 
     - name: write gunicorn service script
       template:
@@ -117,12 +120,14 @@
         dest: /etc/systemd/system/gunicorn-{{ host }}.service
       notify:
         - restart gunicorn
+      become_user: root
 
   handlers:
     - name: restart nginx
       service:
         name: nginx
         state: restarted
+      become_user: root
 
     - name: restart gunicorn
       systemd:
@@ -130,3 +135,4 @@
         daemon_reload: yes
         enabled: yes
         state: restarted
+      become_user: root

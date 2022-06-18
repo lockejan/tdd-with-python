@@ -1,3 +1,5 @@
+#!/usr/bin/env python
+
 import smtplib, ssl
 
 smtp_server = "mail.example.de"
