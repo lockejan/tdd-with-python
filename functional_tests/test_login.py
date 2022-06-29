@@ -15,7 +15,7 @@ SUBJECT = 'Your login link for Superlists'
 class LoginTest(FunctionalTest):
     def test_can_get_email_link_to_log_in(self):
         # Edith goes to the awesome superlists site
-        # and notices a "Logi in" section in the navbar for the first time
+        # and notices a "Login" section in the navbar for the first time
         # It's telling her to enter her email address, so she does
         # if self.staging_server:
         #     test_email = 'coffee@smittie.de'
@@ -26,7 +26,7 @@ class LoginTest(FunctionalTest):
         self.browser.find_element_by_name('email').send_keys(TEST_EMAIL)
         self.browser.find_element_by_name('email').send_keys(Keys.ENTER)
 
-        # A message appears teling her an email has been sent
+        # A message appears telling her an email has been sent
         self.wait_for(lambda: self.assertIn(
             'Check your email',
             self.browser.find_element_by_tag_name('body').text))
