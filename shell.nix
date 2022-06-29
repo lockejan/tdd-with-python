@@ -8,6 +8,7 @@ pkgs.mkShell {
     python38
     # python38Packages.ansible
     python38Packages.pip
+    # python38Packages.python-lsp-server
   ];
 
   shellHook = ''
