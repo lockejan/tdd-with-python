@@ -5,14 +5,14 @@ pkgs.mkShell {
   nativeBuildInputs = with pkgs; [
     bashInteractive
     libffi
-    python38
-    # python38Packages.ansible
-    python38Packages.pip
-    # python38Packages.python-lsp-server
+    python37
+    # python37Packages.ansible
+    python37Packages.pip
+    # python37Packages.python-lsp-server
   ];
 
   shellHook = ''
-    echo "Using ${pkgs.python38.name}"
+    echo "Using ${pkgs.python37.name}"
 
     [ ! -d '$PROJDIR/python-dev' ] && python -m venv python-dev && echo "SETUP python-dev: DONE"
     source python-dev/bin/activate

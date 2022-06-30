@@ -1,5 +1,5 @@
 {
-  description = "A basic flake with a dev shell for a python38 django toy project";
+  description = "A basic flake with a dev shell for a python37 django toy project";
   inputs.nixpkgs.url = "github:NixOS/nixpkgs/nixpkgs-unstable";
   inputs.flake-utils.url = "github:numtide/flake-utils";
 
@@ -11,9 +11,9 @@
           nativeBuildInputs = with pkgs; [
             bashInteractive
             libffi
-            python38
-            # python38Packages.ansible
-            python38Packages.pip
+            python37
+            # python37Packages.ansible
+            python37Packages.pip
           ];
           buildInputs = [ ];
           shellHook = ''
