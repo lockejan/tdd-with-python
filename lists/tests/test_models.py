@@ -1,6 +1,9 @@
 from django.test import TestCase
 from django.core.exceptions import ValidationError
 from lists.models import Item, List
+from django.contrib.auth import get_user_model
+
+User = get_user_model()
 
 
 class ItemModelTest(TestCase):
@@ -53,3 +56,12 @@ class ListModelTest(TestCase):
     def test_string_representation(self):
         item = Item(text='some text')
         self.assertEqual(str(item), 'some text')
+
+    def test_lists_can_have_owners(self):
+        user = User.objects.create(email='a@b.com')
+        new_list = List.objects.create(owner=user)
+        self.assertIn(new_list, user.list_set.all())
+
+    def test_list_owner_is_optional(self):
+        List.objects.create()  # should not raise
+        self.assertEqual(len(List.objects.all()), 1)
