@@ -28,7 +28,7 @@ def wait(fn):
 class FunctionalTest(StaticLiveServerTestCase):
     def setUp(self):
         options = Options()
-        options.headless = True if os.environ.get('HEADLESS') else False
+        options.headless = False if os.environ.get('HEADLESS') else True
         self.browser = webdriver.Firefox(options=options)
         self.staging_server = os.environ.get('STAGING_SERVER')
         if self.staging_server:
