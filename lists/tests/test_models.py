@@ -65,3 +65,9 @@ class ListModelTest(TestCase):
     def test_list_owner_is_optional(self):
         List.objects.create()  # should not raise
         self.assertEqual(len(List.objects.all()), 1)
+
+    def test_list_name_is_first_item_text(self):
+        new_list = List.objects.create()
+        Item.objects.create(list=new_list, text='first item')
+        Item.objects.create(list=new_list, text='second item')
+        self.assertEqual(new_list.name, 'first item')
