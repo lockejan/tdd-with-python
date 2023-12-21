@@ -4,6 +4,7 @@ import re
 import time
 
 from django.core import mail
+from selenium.webdriver.common.by import By
 from selenium.webdriver.common.keys import Keys
 
 from .base import FunctionalTest
@@ -23,13 +24,13 @@ class LoginTest(FunctionalTest):
         #     test_email = TEST_EMAIL
 
         self.browser.get(self.live_server_url)
-        self.browser.find_element_by_name("email").send_keys(TEST_EMAIL)
-        self.browser.find_element_by_name("email").send_keys(Keys.ENTER)
+        self.browser.find_element(By.NAME, "email").send_keys(TEST_EMAIL)
+        self.browser.find_element(By.NAME, "email").send_keys(Keys.ENTER)
 
         # A message appears telling her an email has been sent
         self.wait_for(
             lambda: self.assertIn(
-                "Check your email", self.browser.find_element_by_tag_name("body").text
+                "Check your email", self.browser.find_element(By.TAG_NAME, "body").text
             )
         )
 
@@ -51,7 +52,7 @@ class LoginTest(FunctionalTest):
         self.wait_to_be_logged_in(email=TEST_EMAIL)
 
         # Now she logs out
-        self.browser.find_element_by_link_text("Log out").click()
+        self.browser.find_element(By.LINK_TEXT, "Log out").click()
 
         # She is logged out
         self.wait_to_be_logged_out(email=TEST_EMAIL)

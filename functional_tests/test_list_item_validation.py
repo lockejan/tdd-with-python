@@ -1,10 +1,11 @@
+from selenium.webdriver.common.by import By
 from selenium.webdriver.common.keys import Keys
 from .base import FunctionalTest
 
 
 class ItemValidationTest(FunctionalTest):
     def get_error_element(self):
-        return self.browser.find_element_by_css_selector(".has-error")
+        return self.browser.find_element(By.CSS_SELECTOR, ".has-error")
 
     def test_cannot_add_empty_list_items(self):
         # Edith goes to the homepage and accidentally tries to submit
@@ -14,7 +15,7 @@ class ItemValidationTest(FunctionalTest):
 
         # The browser intercepts the request, and does not load the list page
         self.wait_for(
-            lambda: self.browser.find_element_by_css_selector("#id_text:invalid")
+            lambda: self.browser.find_element(By.CSS_SELECTOR, "#id_text:invalid")
         )
 
         # She tries again with some text for the item, which now works
@@ -26,7 +27,7 @@ class ItemValidationTest(FunctionalTest):
         # Again, the browser will not comply
         self.wait_for_row_in_list_table("1: Buy coffee beans")
         self.wait_for(
-            lambda: self.browser.find_element_by_css_selector("#id_text:invalid")
+            lambda: self.browser.find_element(By.CSS_SELECTOR, "#id_text:invalid")
         )
 
         # And she can correct it by filling some text in
