@@ -15,7 +15,7 @@ class Command(BaseCommand):
         :returns: configured parser
 
         """
-        parser.add_argument('email')
+        parser.add_argument("email")
 
     def handle(self, **options):
         """trigger session_key creation for given email
@@ -24,7 +24,7 @@ class Command(BaseCommand):
         :returns: writes session_key to stdout
 
         """
-        session_key = create_pre_authenticated_session(options['email'])
+        session_key = create_pre_authenticated_session(options["email"])
         self.stdout.write(session_key)
 
 

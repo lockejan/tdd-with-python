@@ -11,25 +11,26 @@ DUPLICATE_ITEM_ERROR = "You've already got this in your list"
 class ItemForm(ModelForm):
     class Meta:
         model = Item
-        fields = ('text', )
+        fields = ("text",)
         widgets = {
-            'text':
-            TextInput(
+            "text": TextInput(
                 attrs={
-                    'placeholder': 'Enter a to-do item',
-                    'class': 'form-control input-lg',
-                })
+                    "placeholder": "Enter a to-do item",
+                    "class": "form-control input-lg",
+                }
+            )
         }
-        error_messages = {'text': {'required': EMPTY_ITEM_ERROR}}
+        error_messages = {"text": {"required": EMPTY_ITEM_ERROR}}
 
 
 class NewListForm(ItemForm):
     def save(self, owner):
         if owner.is_authenticated:
-            return List.create_new(first_item_text=self.cleaned_data['text'],
-                            owner=owner)
+            return List.create_new(
+                first_item_text=self.cleaned_data["text"], owner=owner
+            )
         else:
-            return List.create_new(first_item_text=self.cleaned_data['text'])
+            return List.create_new(first_item_text=self.cleaned_data["text"])
 
 
 class ExistingListItemForm(ItemForm):
@@ -41,5 +42,5 @@ class ExistingListItemForm(ItemForm):
         try:
             self.instance.validate_unique()
         except ValidationError as e:
-            e.error_dict = {'text': [DUPLICATE_ITEM_ERROR]}
+            e.error_dict = {"text": [DUPLICATE_ITEM_ERROR]}
             self._update_errors(e)

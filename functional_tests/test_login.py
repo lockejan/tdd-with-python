@@ -8,8 +8,8 @@ from selenium.webdriver.common.keys import Keys
 
 from .base import FunctionalTest
 
-TEST_EMAIL = 'coffee@smittie.de'
-SUBJECT = 'Your login link for Superlists'
+TEST_EMAIL = "coffee@smittie.de"
+SUBJECT = "Your login link for Superlists"
 
 
 class LoginTest(FunctionalTest):
@@ -23,22 +23,24 @@ class LoginTest(FunctionalTest):
         #     test_email = TEST_EMAIL
 
         self.browser.get(self.live_server_url)
-        self.browser.find_element_by_name('email').send_keys(TEST_EMAIL)
-        self.browser.find_element_by_name('email').send_keys(Keys.ENTER)
+        self.browser.find_element_by_name("email").send_keys(TEST_EMAIL)
+        self.browser.find_element_by_name("email").send_keys(Keys.ENTER)
 
         # A message appears telling her an email has been sent
-        self.wait_for(lambda: self.assertIn(
-            'Check your email',
-            self.browser.find_element_by_tag_name('body').text))
+        self.wait_for(
+            lambda: self.assertIn(
+                "Check your email", self.browser.find_element_by_tag_name("body").text
+            )
+        )
 
         # She checks her email and finds a message
         body = self.wait_for_email(TEST_EMAIL, SUBJECT)
 
         # It has a url link in it
-        self.assertIn('Use this link to log in', body)
-        url_search = re.search(r'http://.+/.+$', body)
+        self.assertIn("Use this link to log in", body)
+        url_search = re.search(r"http://.+/.+$", body)
         if not url_search:
-            self.fail(f'Could not find url in email body:\n{body}')
+            self.fail(f"Could not find url in email body:\n{body}")
         url = url_search.group(0)
         self.assertIn(self.live_server_url, url)
 
@@ -49,7 +51,7 @@ class LoginTest(FunctionalTest):
         self.wait_to_be_logged_in(email=TEST_EMAIL)
 
         # Now she logs out
-        self.browser.find_element_by_link_text('Log out').click()
+        self.browser.find_element_by_link_text("Log out").click()
 
         # She is logged out
         self.wait_to_be_logged_out(email=TEST_EMAIL)
@@ -63,21 +65,21 @@ class LoginTest(FunctionalTest):
 
         email_id = None
         start = time.time()
-        inbox = poplib.POP3_SSL(os.environ.get('EMAIL_HOST'))
+        inbox = poplib.POP3_SSL(os.environ.get("EMAIL_HOST"))
         try:
             inbox.user(test_email)
-            inbox.pass_(os.environ.get('EMAIL_HOST_PASSWORD'))
+            inbox.pass_(os.environ.get("EMAIL_HOST_PASSWORD"))
             while time.time() - start < 60:
                 # get 10 newest messages
                 count, _ = inbox.stat()
                 for i in reversed(range(max(1, count - 10), count + 1)):
-                    print('getting msg', i)
+                    print("getting msg", i)
                     _, lines, _ = inbox.retr(i)
-                    lines = [line.decode('utf8') for line in lines]
+                    lines = [line.decode("utf8") for line in lines]
                     # print(lines)
-                    if f'Subject: {subject}' in lines:
+                    if f"Subject: {subject}" in lines:
                         email_id = i
-                        body = '\n'.join(lines)
+                        body = "\n".join(lines)
                         return body
                     time.sleep(5)
         finally:
