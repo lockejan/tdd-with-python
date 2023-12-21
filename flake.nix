@@ -23,8 +23,8 @@
             # echo "projdir: $PROJDIR"
             echo "Using ${pkgs.python37.name}"
 
-            [ ! -d '$PROJDIR/python-dev' ] && python -m venv python-dev && echo "SETUP python-dev: DONE"
-            source python-dev/bin/activate
+            [ ! -d '$PROJDIR/venv' ] && python -m venv venv && echo "SETUP venv: DONE"
+            source venv/bin/activate
             # python -m pip install --upgrade pip
             python -m pip install -r requirements-dev.txt
             # python -m pip install -r requirements.txt
