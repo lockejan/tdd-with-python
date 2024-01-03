@@ -14,6 +14,7 @@
             python37
             # python37Packages.ansible
             python37Packages.pip
+            # geckodriver
           ];
           buildInputs = [ ];
           shellHook = ''

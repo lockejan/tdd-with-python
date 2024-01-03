@@ -9,3 +9,4 @@ include/
 pyvenv.cfg
 /static
 .vagrant
+functional_tests/screendumps
