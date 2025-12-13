@@ -1,6 +1,6 @@
 # pull official base image
 # FROM python:3.9.6-alpine
-FROM python:3.9.13-slim-bullseye
+FROM python:3.13.6-slim-bullseye
 
 # set work directory
 WORKDIR /usr/src/app
